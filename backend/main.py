@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 load_dotenv(Path(__file__).parent.parent / ".env")
 
 from vision import analyze_room
-from catalog import get_recommendations, get_wall_colors, get_wall_decor
+from db import get_products_by_style_and_categories, get_wall_decor_by_style, get_wall_colors_for_mood
 from sourcing import price_products
 
 app = FastAPI(title="AI Room Designer", version="2.0.0")
@@ -46,10 +46,10 @@ async def design_room(
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Room analysis failed: {str(e)}")
 
-    # Get product alternatives per recommended category
-    raw_by_category = get_recommendations(
+    # Get product alternatives per recommended category (from Supabase, falls back to catalog)
+    raw_by_category = get_products_by_style_and_categories(
         style=style,
-        recommended_categories=room_data.get("recommended_products", []),
+        categories=room_data.get("recommended_products", []),
     )
 
     # Price every product in every category
@@ -59,10 +59,10 @@ async def design_room(
     }
 
     # Wall color options based on mood
-    wall_colors = get_wall_colors(mood)
+    wall_colors = get_wall_colors_for_mood(mood)
 
-    # Wall decor options based on style
-    wall_decor_options = price_products(get_wall_decor(style))
+    # Wall decor options based on style (from Supabase, falls back to catalog)
+    wall_decor_options = price_products(get_wall_decor_by_style(style))
 
     # Default selected index 0 for each category
     selected_products = {

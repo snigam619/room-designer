@@ -3,3 +3,5 @@ uvicorn[standard]
 anthropic
 python-dotenv
 python-multipart
+supabase
+openai

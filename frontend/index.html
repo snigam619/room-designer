@@ -109,12 +109,24 @@
       <!-- Results -->
       <section id="results" style="display:none">
 
-        <div class="results-hero">
-          <div class="hero-photo">
+        <!-- Side-by-side room panels -->
+        <div class="render-panels">
+          <div class="render-panel">
+            <div class="panel-label">Your Room</div>
             <img id="result-room-img" alt="Your room" />
-            <div class="photo-label">Your Room</div>
           </div>
-          <div class="hero-brief">
+          <div class="render-panel">
+            <div class="panel-label">AI Redesign <span id="render-status"></span></div>
+            <div id="render-skeleton" class="render-skeleton">
+              <div class="skeleton-spinner"></div>
+              <p>Generating your design…</p>
+            </div>
+            <img id="ai-render-img" alt="AI room render" style="display:none" />
+          </div>
+        </div>
+
+        <div class="results-hero">
+          <div class="hero-brief" style="flex:1">
             <div class="room-type-badge" id="res-room-type"></div>
             <h2 id="res-design-summary"></h2>
             <div class="accent-row">
@@ -125,7 +137,7 @@
         </div>
 
         <div class="section-block">
-          <div class="section-heading"><span>🎨</span> Wall Color <span class="section-hint">Click to change</span></div>
+          <div class="section-heading"><span>🎨</span> Wall Color <span class="section-hint">Click to change — updates AI render</span></div>
           <div class="wall-color-grid" id="wall-color-grid"></div>
         </div>
 
@@ -135,7 +147,7 @@
         </div>
 
         <div class="section-block">
-          <div class="section-heading"><span>🛋️</span> Furniture &amp; Decor <span class="section-hint">Click a card to select it</span></div>
+          <div class="section-heading"><span>🛋️</span> Furniture &amp; Decor <span class="section-hint">Click a card to select — updates AI render</span></div>
           <div id="product-grid"></div>
         </div>
 

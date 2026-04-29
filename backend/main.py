@@ -1,13 +1,16 @@
 from fastapi import FastAPI, File, UploadFile, Form, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
 from pathlib import Path
 from dotenv import load_dotenv
+from typing import List
 
 load_dotenv(Path(__file__).parent.parent / ".env")
 
 from vision import analyze_room
 from db import get_products_by_style_and_categories, get_wall_decor_by_style, get_wall_colors_for_mood
 from sourcing import price_products
+from image_gen import generate_room_render
 
 app = FastAPI(title="AI Room Designer", version="2.0.0")
 
@@ -21,9 +24,29 @@ app.add_middleware(
 ALLOWED_TYPES = {"image/jpeg", "image/png", "image/webp"}
 
 
+class RenderRequest(BaseModel):
+    style: str
+    wall_color_name: str
+    room_type: str
+    selected_products: List[str]
+
+
 @app.get("/health")
 def health():
     return {"status": "ok"}
+
+
+@app.post("/generate-render")
+async def generate_render(req: RenderRequest):
+    image_data = generate_room_render(
+        style=req.style,
+        wall_color_name=req.wall_color_name,
+        room_type=req.room_type,
+        selected_products=req.selected_products,
+    )
+    if image_data is None:
+        raise HTTPException(status_code=503, detail="Image generation unavailable. Check HF_API_TOKEN or try again.")
+    return {"image_data": image_data}
 
 
 @app.post("/design-room")

@@ -116,6 +116,61 @@ designBtn.addEventListener("click", async () => {
   }
 });
 
+// ── Generate AI room render (debounced) ───────────────────────────────────────
+let renderDebounceTimer = null;
+
+function scheduleRender() {
+  clearTimeout(renderDebounceTimer);
+  renderDebounceTimer = setTimeout(triggerRender, 400);
+}
+
+async function triggerRender() {
+  const design = state.design;
+  if (!design) return;
+
+  const selectedNames = Object.values(state.selectedProducts)
+    .filter(Boolean)
+    .map((p) => p.name);
+
+  const skeleton = document.getElementById("render-skeleton");
+  const renderImg = document.getElementById("ai-render-img");
+  const statusEl = document.getElementById("render-status");
+
+  skeleton.style.display = "flex";
+  renderImg.style.display = "none";
+  statusEl.textContent = "generating…";
+
+  try {
+    const res = await fetch(`${API_BASE}/generate-render`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        style: state.style,
+        wall_color_name: state.selectedWallColor?.name || "Warm White",
+        room_type: design.room_type || "living room",
+        selected_products: selectedNames,
+      }),
+    });
+
+    const data = await res.json();
+    if (res.ok && data.image_data) {
+      renderImg.src = data.image_data;
+      renderImg.style.display = "block";
+      skeleton.style.display = "none";
+      statusEl.textContent = "✓ updated";
+      setTimeout(() => { statusEl.textContent = ""; }, 2000);
+    } else {
+      skeleton.style.display = "none";
+      renderImg.src = "";
+      renderImg.style.display = "none";
+      statusEl.textContent = "unavailable";
+    }
+  } catch {
+    skeleton.style.display = "none";
+    statusEl.textContent = "unavailable";
+  }
+}
+
 // ── Render results ────────────────────────────────────────────────────────────
 function renderResults(data) {
   document.getElementById("result-room-img").src = previewImg.src;
@@ -147,6 +202,9 @@ function renderResults(data) {
 
   results.style.display = "block";
   results.scrollIntoView({ behavior: "smooth", block: "start" });
+
+  // Trigger initial AI render
+  triggerRender();
 }
 
 // ── Wall color picker ─────────────────────────────────────────────────────────
@@ -172,6 +230,7 @@ function renderWallColors(options, aiSuggested) {
       grid.querySelectorAll(".wall-color-swatch").forEach((s) => s.classList.remove("selected"));
       el.classList.add("selected");
       state.selectedWallColor = color;
+      scheduleRender();
     });
     grid.appendChild(el);
   });
@@ -253,6 +312,7 @@ function buildProductCard(product, isSelected, category, row) {
     if (badge) { badge.className = "selected-badge"; badge.textContent = "✓ Selected"; }
     state.selectedProducts[category] = product;
     updateTotal();
+    scheduleRender();
   });
 
   return card;

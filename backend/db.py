@@ -1,11 +1,12 @@
 import os
+from typing import Optional
 from supabase import create_client, Client
 from catalog import get_recommendations, get_wall_colors, get_wall_decor
 
-_client: Client | None = None
+_client: Optional[Client] = None
 
 
-def _get_client() -> Client | None:
+def _get_client() -> Optional[Client]:
     global _client
     if _client is None:
         url = os.getenv("SUPABASE_URL")

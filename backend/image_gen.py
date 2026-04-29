@@ -2,6 +2,7 @@ import os
 import requests
 import base64
 import time
+from typing import Optional
 
 HF_API_TOKEN = os.getenv("HF_API_TOKEN")
 HF_MODEL_URL = "https://api-inference.huggingface.co/models/stabilityai/stable-diffusion-xl-base-1.0"
@@ -23,7 +24,7 @@ def generate_room_render(
     room_type: str,
     selected_products: list,
     retries: int = 3,
-) -> str | None:
+) -> Optional[str]:
     if not HF_API_TOKEN:
         return None
 

@@ -8,6 +8,8 @@ import os
 load_dotenv(Path(__file__).parent.parent / ".env")
 
 from vision import analyze_room
+from catalog import get_recommendations
+from sourcing import price_products
 
 app = FastAPI(title="AI Room Designer", version="1.0.0")
 
@@ -32,7 +34,7 @@ async def analyze_room_endpoint(image: UploadFile = File(...)):
         raise HTTPException(status_code=400, detail="Only JPEG, PNG, WebP, or GIF images are accepted.")
 
     image_bytes = await image.read()
-    if len(image_bytes) > 10 * 1024 * 1024:  # 10 MB limit
+    if len(image_bytes) > 10 * 1024 * 1024:
         raise HTTPException(status_code=400, detail="Image must be under 10 MB.")
 
     try:
@@ -40,4 +42,16 @@ async def analyze_room_endpoint(image: UploadFile = File(...)):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Room analysis failed: {str(e)}")
 
-    return room_data
+    raw_products = get_recommendations(
+        style=room_data.get("detected_style", "modern"),
+        missing_items=room_data.get("missing_items", []),
+    )
+    priced_products = price_products(raw_products)
+
+    total_landed_cost = round(sum(p["landed_cost_usd"] for p in priced_products), 2)
+
+    return {
+        **room_data,
+        "recommendations": priced_products,
+        "total_landed_cost_usd": total_landed_cost,
+    }

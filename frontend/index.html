@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Room Designer — Global Sourcing Cost</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <header>
+    <span>🛋️</span>
+    <h1>AI Room Designer &amp; Global Sourcing Cost</h1>
+  </header>
+
+  <main>
+
+    <!-- Upload Section -->
+    <section id="upload-section">
+      <h2>Design your room with AI</h2>
+      <p>Upload a room photo — we'll identify the style, recommend products, and calculate global sourcing costs.</p>
+
+      <div id="drop-zone">
+        <div class="icon">📷</div>
+        <p><strong>Click to upload</strong> or drag and drop a room photo</p>
+        <p style="margin-top:6px; font-size:0.8rem;">JPEG, PNG, WebP · Max 10 MB</p>
+        <input type="file" id="file-input" accept="image/jpeg,image/png,image/webp" />
+      </div>
+
+      <div id="preview-container">
+        <img id="preview-img" alt="Room preview" />
+      </div>
+
+      <button id="analyze-btn">✨ Analyze Room</button>
+    </section>
+
+    <!-- Loading -->
+    <div id="loading">
+      <div class="spinner"></div>
+      <p>Claude is analyzing your room…</p>
+    </div>
+
+    <!-- Error -->
+    <div id="error-box"></div>
+
+    <!-- Results -->
+    <section id="results">
+
+      <div id="style-card">
+        <div class="style-meta">
+          <div class="style-label">Detected Style</div>
+          <div class="style-value" id="res-style"></div>
+        </div>
+        <div class="style-meta">
+          <div class="style-label">Room Type</div>
+          <div class="style-value" id="res-room-type"></div>
+        </div>
+        <div class="style-meta">
+          <div class="style-label">Color Palette</div>
+          <div class="color-chips" id="res-colors"></div>
+        </div>
+      </div>
+
+      <h3>Recommended Products &amp; Sourcing Costs</h3>
+      <div id="product-grid"></div>
+
+      <div id="total-bar">
+        <span class="total-label">Total Estimated Landed Cost</span>
+        <span class="total-amount" id="res-total"></span>
+      </div>
+
+      <button id="reset-btn">← Analyze another room</button>
+
+    </section>
+
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

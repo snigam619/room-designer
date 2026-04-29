@@ -9,69 +9,207 @@
 <body>
 
   <header>
-    <span>🛋️</span>
-    <h1>AI Room Designer &amp; Global Sourcing Cost</h1>
+    <div class="header-inner">
+      <div class="logo">🛋️ <span>RoomAI Designer</span></div>
+      <div class="tagline">Upload · Design · Source Globally</div>
+    </div>
   </header>
+
+  <!-- ── Tabs ───────────────────────────────────────────────────── -->
+  <div class="tab-bar">
+    <div class="tab-bar-inner">
+      <button class="tab-btn active" data-tab="tab-designer">✨ AI Room Designer</button>
+      <button class="tab-btn" data-tab="tab-sourcing">🌍 Sourcing Info</button>
+    </div>
+  </div>
 
   <main>
 
-    <!-- Upload Section -->
-    <section id="upload-section">
-      <h2>Design your room with AI</h2>
-      <p>Upload a room photo — we'll identify the style, recommend products, and calculate global sourcing costs.</p>
+    <!-- ══════════════════════════════════════════════════════════ -->
+    <!-- TAB 1: AI Room Designer                                   -->
+    <!-- ══════════════════════════════════════════════════════════ -->
+    <div id="tab-designer" class="tab-panel active">
 
-      <div id="drop-zone">
-        <div class="icon">📷</div>
-        <p><strong>Click to upload</strong> or drag and drop a room photo</p>
-        <p style="margin-top:6px; font-size:0.8rem;">JPEG, PNG, WebP · Max 10 MB</p>
-        <input type="file" id="file-input" accept="image/jpeg,image/png,image/webp" />
+      <!-- STEP 1: Upload -->
+      <section id="step-upload" class="step active">
+        <div class="step-label">Step 1 of 2</div>
+        <h2>Upload your room photo</h2>
+        <p class="sub">We'll analyze what's there and design around your preferences.</p>
+
+        <div id="drop-zone">
+          <div class="dz-icon">📷</div>
+          <p><strong>Click to upload</strong> or drag &amp; drop</p>
+          <p class="dz-hint">JPEG · PNG · WebP · Max 10 MB</p>
+          <input type="file" id="file-input" accept="image/jpeg,image/png,image/webp" />
+        </div>
+
+        <div id="preview-wrap" style="display:none">
+          <img id="preview-img" alt="Room preview" />
+        </div>
+
+        <button id="next-btn" class="btn-primary" style="display:none">
+          Next: Choose your style →
+        </button>
+      </section>
+
+      <!-- STEP 2: Preferences -->
+      <section id="step-prefs" class="step">
+        <div class="step-label">Step 2 of 2</div>
+        <h2>How do you want it to feel?</h2>
+        <p class="sub">Pick your preferences — you can change anything after seeing the design.</p>
+
+        <div class="pref-group">
+          <div class="pref-title">Style</div>
+          <div class="option-cards" id="style-cards">
+            <div class="option-card selected" data-value="modern"><div class="card-icon">🏙️</div><div class="card-label">Modern</div></div>
+            <div class="option-card" data-value="mid-century"><div class="card-icon">🪑</div><div class="card-label">Mid-Century</div></div>
+            <div class="option-card" data-value="boho"><div class="card-icon">🌿</div><div class="card-label">Boho</div></div>
+            <div class="option-card" data-value="scandinavian"><div class="card-icon">🌲</div><div class="card-label">Scandinavian</div></div>
+            <div class="option-card" data-value="industrial"><div class="card-icon">🏭</div><div class="card-label">Industrial</div></div>
+            <div class="option-card" data-value="traditional"><div class="card-icon">🏛️</div><div class="card-label">Traditional</div></div>
+          </div>
+        </div>
+
+        <div class="pref-group">
+          <div class="pref-title">Color Mood</div>
+          <div class="option-cards" id="mood-cards">
+            <div class="option-card selected" data-value="light"><div class="card-icon">☀️</div><div class="card-label">Light &amp; Airy</div></div>
+            <div class="option-card" data-value="dark"><div class="card-icon">🌙</div><div class="card-label">Dark &amp; Moody</div></div>
+            <div class="option-card" data-value="warm"><div class="card-icon">🔥</div><div class="card-label">Warm &amp; Earthy</div></div>
+            <div class="option-card" data-value="cool"><div class="card-icon">❄️</div><div class="card-label">Cool &amp; Calm</div></div>
+          </div>
+        </div>
+
+        <div class="pref-group">
+          <div class="pref-title">Budget (USD)</div>
+          <div class="option-cards" id="budget-cards">
+            <div class="option-card" data-value="500"><div class="card-icon">💰</div><div class="card-label">Under $500</div></div>
+            <div class="option-card selected" data-value="1000"><div class="card-icon">💰💰</div><div class="card-label">$500–$1,000</div></div>
+            <div class="option-card" data-value="2000"><div class="card-icon">💰💰💰</div><div class="card-label">$1,000–$2,000</div></div>
+            <div class="option-card" data-value="5000"><div class="card-icon">✨</div><div class="card-label">$2,000+</div></div>
+          </div>
+        </div>
+
+        <div class="prefs-actions">
+          <button id="back-btn" class="btn-secondary">← Back</button>
+          <button id="design-btn" class="btn-primary">✨ Generate My Design</button>
+        </div>
+      </section>
+
+      <!-- Loading -->
+      <div id="loading" style="display:none">
+        <div class="spinner"></div>
+        <p>Claude is designing your room…</p>
+        <p class="loading-sub">Analyzing style · selecting products · calculating sourcing costs</p>
       </div>
 
-      <div id="preview-container">
-        <img id="preview-img" alt="Room preview" />
-      </div>
+      <!-- Error -->
+      <div id="error-box" style="display:none"></div>
 
-      <button id="analyze-btn">✨ Analyze Room</button>
-    </section>
+      <!-- Results -->
+      <section id="results" style="display:none">
 
-    <!-- Loading -->
-    <div id="loading">
-      <div class="spinner"></div>
-      <p>Claude is analyzing your room…</p>
+        <div class="results-hero">
+          <div class="hero-photo">
+            <img id="result-room-img" alt="Your room" />
+            <div class="photo-label">Your Room</div>
+          </div>
+          <div class="hero-brief">
+            <div class="room-type-badge" id="res-room-type"></div>
+            <h2 id="res-design-summary"></h2>
+            <div class="accent-row">
+              <span class="accent-swatch" id="res-accent-swatch"></span>
+              <span id="res-accent-name"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-block">
+          <div class="section-heading"><span>🎨</span> Wall Color <span class="section-hint">Click to change</span></div>
+          <div class="wall-color-grid" id="wall-color-grid"></div>
+        </div>
+
+        <div class="section-block">
+          <div class="section-heading"><span>🖼️</span> Wall Decor <span class="section-hint">Click to swap</span></div>
+          <div class="decor-grid" id="decor-grid"></div>
+        </div>
+
+        <div class="section-block">
+          <div class="section-heading"><span>🛋️</span> Furniture &amp; Decor <span class="section-hint">Click a card to select it</span></div>
+          <div id="product-grid"></div>
+        </div>
+
+        <div id="total-bar">
+          <div>
+            <div class="total-label">Total Estimated Landed Cost</div>
+            <div class="total-sub">Includes unit cost + import duty + freight to USA</div>
+          </div>
+          <div class="total-amount" id="res-total"></div>
+        </div>
+
+        <button id="reset-btn" class="btn-secondary center">← Start over</button>
+
+      </section>
     </div>
 
-    <!-- Error -->
-    <div id="error-box"></div>
+    <!-- ══════════════════════════════════════════════════════════ -->
+    <!-- TAB 2: Sourcing Info                                      -->
+    <!-- ══════════════════════════════════════════════════════════ -->
+    <div id="tab-sourcing" class="tab-panel">
+      <h2>How Global Sourcing Costs Work</h2>
+      <p class="sub">Every product recommendation includes a full landed cost breakdown. Here's what each number means.</p>
 
-    <!-- Results -->
-    <section id="results">
-
-      <div id="style-card">
-        <div class="style-meta">
-          <div class="style-label">Detected Style</div>
-          <div class="style-value" id="res-style"></div>
+      <div class="info-grid">
+        <div class="info-card">
+          <div class="info-icon">🏭</div>
+          <div class="info-title">Unit Cost</div>
+          <div class="info-body">The manufacturer's price at origin — what the factory charges before any shipping or duties.</div>
         </div>
-        <div class="style-meta">
-          <div class="style-label">Room Type</div>
-          <div class="style-value" id="res-room-type"></div>
+        <div class="info-card">
+          <div class="info-icon">📋</div>
+          <div class="info-title">HS Code</div>
+          <div class="info-body">Harmonized System code — a 6-digit international product classification used by customs worldwide to determine duty rates.</div>
         </div>
-        <div class="style-meta">
-          <div class="style-label">Color Palette</div>
-          <div class="color-chips" id="res-colors"></div>
+        <div class="info-card">
+          <div class="info-icon">💸</div>
+          <div class="info-title">Import Duty</div>
+          <div class="info-body">Tax charged by US Customs on imported goods. Rates vary by HS code and country of origin — Chinese furniture currently carries a 25% tariff.</div>
+        </div>
+        <div class="info-card">
+          <div class="info-icon">🚢</div>
+          <div class="info-title">Freight Cost</div>
+          <div class="info-body">Estimated ocean freight from the origin country to a US port, calculated per kilogram. Varies by distance and origin.</div>
+        </div>
+        <div class="info-card">
+          <div class="info-icon">🧮</div>
+          <div class="info-title">Landed Cost</div>
+          <div class="info-body">The total cost to get the product to a US warehouse: Unit Cost + Duty + Freight. This is what a buyer actually pays before retail markup.</div>
+        </div>
+        <div class="info-card">
+          <div class="info-icon">🌍</div>
+          <div class="info-title">Origin Countries</div>
+          <div class="info-body">Products are sourced from China, Vietnam, India, Indonesia, Poland, Italy, and more — each with different duty rates under US trade agreements.</div>
         </div>
       </div>
 
-      <h3>Recommended Products &amp; Sourcing Costs</h3>
-      <div id="product-grid"></div>
-
-      <div id="total-bar">
-        <span class="total-label">Total Estimated Landed Cost</span>
-        <span class="total-amount" id="res-total"></span>
+      <div class="duty-table-wrap">
+        <div class="section-heading" style="margin-bottom:12px"><span>📊</span> Key Duty Rates by Origin (Furniture, HS Chapter 94)</div>
+        <table class="duty-table">
+          <thead><tr><th>Country</th><th>Duty Rate</th><th>Trade Agreement</th></tr></thead>
+          <tbody>
+            <tr><td>🇻🇳 Vietnam</td><td class="duty-good">0%</td><td>Normal trade relations</td></tr>
+            <tr><td>🇮🇳 India</td><td class="duty-good">0%</td><td>Normal trade relations</td></tr>
+            <tr><td>🇮🇩 Indonesia</td><td class="duty-good">0%</td><td>Normal trade relations</td></tr>
+            <tr><td>🇵🇱 Poland</td><td class="duty-good">0%</td><td>Normal trade relations</td></tr>
+            <tr><td>🇲🇽 Mexico</td><td class="duty-good">0%</td><td>USMCA</td></tr>
+            <tr><td>🇬🇧 United Kingdom</td><td class="duty-good">0%</td><td>Normal trade relations</td></tr>
+            <tr><td>🇲🇾 Malaysia</td><td class="duty-mid">3%</td><td>Standard rate</td></tr>
+            <tr><td>🇹🇷 Turkey</td><td class="duty-mid">5%</td><td>Standard rate</td></tr>
+            <tr><td>🇨🇳 China</td><td class="duty-high">25%</td><td>Section 301 tariff</td></tr>
+          </tbody>
+        </table>
       </div>
-
-      <button id="reset-btn">← Analyze another room</button>
-
-    </section>
+    </div>
 
   </main>
 

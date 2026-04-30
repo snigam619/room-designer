@@ -3,226 +3,215 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AI Room Designer — Global Sourcing Cost</title>
+  <title>AI Room Designer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
   <header>
     <div class="header-inner">
-      <div class="logo">🛋️ <span>RoomAI Designer</span></div>
-      <div class="tagline">Upload · Design · Source Globally</div>
+      <div class="logo">
+        <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+          <defs>
+            <linearGradient id="logoGrad" x1="0" y1="0" x2="28" y2="28" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#8B65FF"/>
+              <stop offset="100%" stop-color="#FF6B9D"/>
+            </linearGradient>
+          </defs>
+          <rect width="28" height="28" rx="8" fill="url(#logoGrad)" fill-opacity="0.25"/>
+          <path d="M6 18 Q14 8 22 18" stroke="#C8B8FF" stroke-width="2" stroke-linecap="round" fill="none"/>
+          <rect x="4" y="18" width="20" height="3" rx="1.5" fill="#fff" fill-opacity="0.85"/>
+          <circle cx="14" cy="11" r="2.5" fill="#fff"/>
+        </svg>
+        <span>RoomAI</span>
+      </div>
+      <nav class="header-nav">
+        <a href="#" class="nav-link active">Designer</a>
+      </nav>
     </div>
   </header>
 
-  <!-- ── Tabs ───────────────────────────────────────────────────── -->
-  <div class="tab-bar">
-    <div class="tab-bar-inner">
-      <button class="tab-btn active" data-tab="tab-designer">✨ AI Room Designer</button>
-      <button class="tab-btn" data-tab="tab-sourcing">🌍 Sourcing Info</button>
-    </div>
-  </div>
-
   <main>
+    <div class="workspace">
 
-    <!-- ══════════════════════════════════════════════════════════ -->
-    <!-- TAB 1: AI Room Designer                                   -->
-    <!-- ══════════════════════════════════════════════════════════ -->
-    <div id="tab-designer" class="tab-panel active">
+      <!-- ── LEFT PANEL ──────────────────────────────────────────────── -->
+      <div class="left-panel">
 
-      <!-- STEP 1: Upload -->
-      <section id="step-upload" class="step active">
-        <div class="step-label">Step 1 of 2</div>
-        <h2>Upload your room photo</h2>
-        <p class="sub">We'll analyze what's there and design around your preferences.</p>
-
-        <div id="drop-zone">
-          <div class="dz-icon">📷</div>
-          <p><strong>Click to upload</strong> or drag &amp; drop</p>
-          <p class="dz-hint">JPEG · PNG · WebP · Max 10 MB</p>
-          <input type="file" id="file-input" accept="image/jpeg,image/png,image/webp" />
+        <!-- Room Photo -->
+        <div class="panel-section">
+          <div class="panel-section-title">Room Photo</div>
+          <div id="drop-zone">
+            <div class="dz-inner">
+              <div class="dz-icon-wrap">
+                <svg width="26" height="26" viewBox="0 0 32 32" fill="none">
+                  <path d="M4 22L10 14L15 19L20 12L28 22H4Z" stroke="#aaa" stroke-width="1.5" stroke-linejoin="round" fill="none"/>
+                  <circle cx="10" cy="10" r="2.5" stroke="#aaa" stroke-width="1.5" fill="none"/>
+                </svg>
+              </div>
+              <p class="dz-title">Drop photo or <strong>browse</strong></p>
+              <p class="dz-hint">JPEG · PNG · WebP · Max 10 MB</p>
+            </div>
+            <input type="file" id="file-input" accept="image/jpeg,image/png,image/webp" />
+          </div>
+          <div id="preview-wrap" style="display:none">
+            <img id="preview-img" alt="Room preview" />
+            <button id="change-photo-btn" class="change-photo-btn">Change photo</button>
+          </div>
         </div>
 
-        <div id="preview-wrap" style="display:none">
-          <img id="preview-img" alt="Room preview" />
+        <!-- Style -->
+        <div class="panel-section">
+          <div class="panel-section-title">Style</div>
+          <div class="pill-group" id="style-cards">
+            <div class="pill selected" data-value="modern">Modern</div>
+            <div class="pill" data-value="mid-century">Mid-Century</div>
+            <div class="pill" data-value="boho">Boho</div>
+            <div class="pill" data-value="scandinavian">Scandinavian</div>
+            <div class="pill" data-value="industrial">Industrial</div>
+            <div class="pill" data-value="traditional">Traditional</div>
+          </div>
         </div>
 
-        <button id="next-btn" class="btn-primary" style="display:none">
-          Next: Choose your style →
+        <!-- Mood -->
+        <div class="panel-section">
+          <div class="panel-section-title">Mood</div>
+          <div class="pill-group" id="mood-cards">
+            <div class="pill selected" data-value="light">Light &amp; Airy</div>
+            <div class="pill" data-value="dark">Dark &amp; Moody</div>
+            <div class="pill" data-value="warm">Warm &amp; Earthy</div>
+            <div class="pill" data-value="cool">Cool &amp; Calm</div>
+          </div>
+        </div>
+
+        <!-- Budget -->
+        <div class="panel-section">
+          <div class="panel-section-title">Budget</div>
+          <div class="pill-group" id="budget-cards">
+            <div class="pill" data-value="500">Under $500</div>
+            <div class="pill selected" data-value="1000">$500–$1k</div>
+            <div class="pill" data-value="2000">$1k–$2k</div>
+            <div class="pill" data-value="5000">$2k+</div>
+          </div>
+        </div>
+
+        <button id="design-btn" class="btn-primary" disabled>
+          <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M8 1l1.5 4.5H14l-3.7 2.7 1.4 4.3L8 10l-3.7 2.5 1.4-4.3L2 5.5h4.5z" fill="currentColor"/></svg>
+          Generate Design
         </button>
-      </section>
 
-      <!-- STEP 2: Preferences -->
-      <section id="step-prefs" class="step">
-        <div class="step-label">Step 2 of 2</div>
-        <h2>How do you want it to feel?</h2>
-        <p class="sub">Pick your preferences — you can change anything after seeing the design.</p>
-
-        <div class="pref-group">
-          <div class="pref-title">Style</div>
-          <div class="option-cards" id="style-cards">
-            <div class="option-card selected" data-value="modern"><div class="card-icon">🏙️</div><div class="card-label">Modern</div></div>
-            <div class="option-card" data-value="mid-century"><div class="card-icon">🪑</div><div class="card-label">Mid-Century</div></div>
-            <div class="option-card" data-value="boho"><div class="card-icon">🌿</div><div class="card-label">Boho</div></div>
-            <div class="option-card" data-value="scandinavian"><div class="card-icon">🌲</div><div class="card-label">Scandinavian</div></div>
-            <div class="option-card" data-value="industrial"><div class="card-icon">🏭</div><div class="card-label">Industrial</div></div>
-            <div class="option-card" data-value="traditional"><div class="card-icon">🏛️</div><div class="card-label">Traditional</div></div>
-          </div>
-        </div>
-
-        <div class="pref-group">
-          <div class="pref-title">Color Mood</div>
-          <div class="option-cards" id="mood-cards">
-            <div class="option-card selected" data-value="light"><div class="card-icon">☀️</div><div class="card-label">Light &amp; Airy</div></div>
-            <div class="option-card" data-value="dark"><div class="card-icon">🌙</div><div class="card-label">Dark &amp; Moody</div></div>
-            <div class="option-card" data-value="warm"><div class="card-icon">🔥</div><div class="card-label">Warm &amp; Earthy</div></div>
-            <div class="option-card" data-value="cool"><div class="card-icon">❄️</div><div class="card-label">Cool &amp; Calm</div></div>
-          </div>
-        </div>
-
-        <div class="pref-group">
-          <div class="pref-title">Budget (USD)</div>
-          <div class="option-cards" id="budget-cards">
-            <div class="option-card" data-value="500"><div class="card-icon">💰</div><div class="card-label">Under $500</div></div>
-            <div class="option-card selected" data-value="1000"><div class="card-icon">💰💰</div><div class="card-label">$500–$1,000</div></div>
-            <div class="option-card" data-value="2000"><div class="card-icon">💰💰💰</div><div class="card-label">$1,000–$2,000</div></div>
-            <div class="option-card" data-value="5000"><div class="card-icon">✨</div><div class="card-label">$2,000+</div></div>
-          </div>
-        </div>
-
-        <div class="prefs-actions">
-          <button id="back-btn" class="btn-secondary">← Back</button>
-          <button id="design-btn" class="btn-primary">✨ Generate My Design</button>
-        </div>
-      </section>
-
-      <!-- Loading -->
-      <div id="loading" style="display:none">
-        <div class="spinner"></div>
-        <p>Claude is designing your room…</p>
-        <p class="loading-sub">Analyzing style · selecting products · calculating sourcing costs</p>
+        <div id="error-box" style="display:none"></div>
       </div>
 
-      <!-- Error -->
-      <div id="error-box" style="display:none"></div>
+      <!-- ── RIGHT PANEL ─────────────────────────────────────────────── -->
+      <div class="right-panel">
 
-      <!-- Results -->
-      <section id="results" style="display:none">
-
-        <!-- Side-by-side room panels -->
-        <div class="render-panels">
-          <div class="render-panel">
-            <div class="panel-label">Your Room</div>
-            <img id="result-room-img" alt="Your room" />
+        <!-- Empty state -->
+        <div id="empty-state">
+          <div class="empty-icon">
+            <svg width="80" height="80" viewBox="0 0 80 80" fill="none">
+              <defs>
+                <linearGradient id="emptyGrad1" x1="0" y1="0" x2="80" y2="80" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%" stop-color="#EDE8FA"/>
+                  <stop offset="100%" stop-color="#FAE8F4"/>
+                </linearGradient>
+                <linearGradient id="emptyGrad2" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stop-color="#6C47FF"/>
+                  <stop offset="100%" stop-color="#FF6B9D"/>
+                </linearGradient>
+              </defs>
+              <rect width="80" height="80" rx="24" fill="url(#emptyGrad1)"/>
+              <path d="M16 56L30 34L40 46L50 30L64 56H16Z" stroke="url(#emptyGrad2)" stroke-width="2.5" stroke-linejoin="round" fill="none"/>
+              <circle cx="30" cy="26" r="5" stroke="url(#emptyGrad2)" stroke-width="2.5" fill="none"/>
+              <circle cx="56" cy="22" r="3" fill="#FFB347" opacity="0.7"/>
+              <circle cx="20" cy="20" r="2" fill="#6C47FF" opacity="0.5"/>
+              <circle cx="68" cy="50" r="2.5" fill="#FF6B9D" opacity="0.5"/>
+            </svg>
           </div>
-          <div class="render-panel">
-            <div class="panel-label">AI Redesign <span id="render-status"></span></div>
-            <div id="render-skeleton" class="render-skeleton">
-              <div class="skeleton-spinner"></div>
-              <p>Generating your design…</p>
-            </div>
-            <img id="ai-render-img" alt="AI room render" style="display:none" />
-          </div>
+          <h3>Your AI design will appear here</h3>
+          <p>Upload a room photo, pick your style &amp; mood,<br>then click <strong>Generate Design</strong> to see magic happen</p>
         </div>
 
-        <div class="results-hero">
-          <div class="hero-brief" style="flex:1">
-            <div class="room-type-badge" id="res-room-type"></div>
-            <h2 id="res-design-summary"></h2>
-            <div class="accent-row">
-              <span class="accent-swatch" id="res-accent-swatch"></span>
-              <span id="res-accent-name"></span>
+        <!-- Loading -->
+        <div id="loading" style="display:none">
+          <div class="loading-inner">
+            <div class="loading-icon"><div class="spinner"></div></div>
+            <h3>Designing your room…</h3>
+            <p>Claude is analyzing your photo and selecting furniture</p>
+            <div class="loading-steps">
+              <div class="lstep active" id="lstep-1"><div class="lstep-dot"></div><span>Analyzing room</span></div>
+              <div class="lstep" id="lstep-2"><div class="lstep-dot"></div><span>Selecting furniture</span></div>
+              <div class="lstep" id="lstep-3"><div class="lstep-dot"></div><span>Generating room concept</span></div>
             </div>
           </div>
         </div>
 
-        <div class="section-block">
-          <div class="section-heading"><span>🎨</span> Wall Color <span class="section-hint">Click to change — updates AI render</span></div>
-          <div class="wall-color-grid" id="wall-color-grid"></div>
-        </div>
+        <!-- Results -->
+        <div id="results" style="display:none">
 
-        <div class="section-block">
-          <div class="section-heading"><span>🖼️</span> Wall Decor <span class="section-hint">Click to swap</span></div>
-          <div class="decor-grid" id="decor-grid"></div>
-        </div>
-
-        <div class="section-block">
-          <div class="section-heading"><span>🛋️</span> Furniture &amp; Decor <span class="section-hint">Click a card to select — updates AI render</span></div>
-          <div id="product-grid"></div>
-        </div>
-
-        <div id="total-bar">
-          <div>
-            <div class="total-label">Total Estimated Landed Cost</div>
-            <div class="total-sub">Includes unit cost + import duty + freight to USA</div>
+          <!-- Images -->
+          <div class="render-panels">
+            <div class="render-panel">
+              <div class="panel-label">Base Room</div>
+              <img id="result-room-img" alt="Your room" />
+            </div>
+            <div class="render-panel">
+              <div class="panel-label">
+                AI Room Concept <span id="render-status" class="render-status-badge"></span>
+                <span class="render-info-tip" title="Each render is a new AI-generated concept with your selected style, wall color and furniture — layout may vary slightly between renders">ⓘ</span>
+              </div>
+              <div id="render-skeleton" class="render-skeleton">
+                <div class="skeleton-spinner"></div>
+                <span>Generating concept…</span>
+              </div>
+              <img id="ai-render-img" alt="AI render" style="display:none" />
+            </div>
           </div>
-          <div class="total-amount" id="res-total"></div>
-        </div>
 
-        <button id="reset-btn" class="btn-secondary center">← Start over</button>
+          <!-- Design brief -->
+          <div class="design-brief-card">
+            <div class="brief-header">
+              <div class="room-type-badge" id="res-room-type"></div>
+              <div class="accent-pill">
+                <span class="accent-swatch" id="res-accent-swatch"></span>
+                <span id="res-accent-name"></span>
+              </div>
+            </div>
+            <p id="res-design-summary" class="brief-body"></p>
+          </div>
 
-      </section>
-    </div>
+          <!-- Wall color -->
+          <div class="option-panel">
+            <div class="option-panel-header">
+              <div class="option-panel-title">Wall Color</div>
+              <div class="panel-hint">Click to update render</div>
+            </div>
+            <div class="wall-color-grid" id="wall-color-grid"></div>
+          </div>
 
-    <!-- ══════════════════════════════════════════════════════════ -->
-    <!-- TAB 2: Sourcing Info                                      -->
-    <!-- ══════════════════════════════════════════════════════════ -->
-    <div id="tab-sourcing" class="tab-panel">
-      <h2>How Global Sourcing Costs Work</h2>
-      <p class="sub">Every product recommendation includes a full landed cost breakdown. Here's what each number means.</p>
+          <!-- Furniture — category nav tabs + product grid -->
+          <div class="option-panel">
+            <div class="option-panel-header">
+              <div class="option-panel-title">Furniture</div>
+              <div class="panel-hint">Click to swap · updates render</div>
+            </div>
+            <!-- Category nav — populated dynamically based on what AI detected -->
+            <div class="category-filter-bar" id="category-filter-bar"></div>
+            <div id="product-grid"></div>
+          </div>
 
-      <div class="info-grid">
-        <div class="info-card">
-          <div class="info-icon">🏭</div>
-          <div class="info-title">Unit Cost</div>
-          <div class="info-body">The manufacturer's price at origin — what the factory charges before any shipping or duties.</div>
-        </div>
-        <div class="info-card">
-          <div class="info-icon">📋</div>
-          <div class="info-title">HS Code</div>
-          <div class="info-body">Harmonized System code — a 6-digit international product classification used by customs worldwide to determine duty rates.</div>
-        </div>
-        <div class="info-card">
-          <div class="info-icon">💸</div>
-          <div class="info-title">Import Duty</div>
-          <div class="info-body">Tax charged by US Customs on imported goods. Rates vary by HS code and country of origin — Chinese furniture currently carries a 25% tariff.</div>
-        </div>
-        <div class="info-card">
-          <div class="info-icon">🚢</div>
-          <div class="info-title">Freight Cost</div>
-          <div class="info-body">Estimated ocean freight from the origin country to a US port, calculated per kilogram. Varies by distance and origin.</div>
-        </div>
-        <div class="info-card">
-          <div class="info-icon">🧮</div>
-          <div class="info-title">Landed Cost</div>
-          <div class="info-body">The total cost to get the product to a US warehouse: Unit Cost + Duty + Freight. This is what a buyer actually pays before retail markup.</div>
-        </div>
-        <div class="info-card">
-          <div class="info-icon">🌍</div>
-          <div class="info-title">Origin Countries</div>
-          <div class="info-body">Products are sourced from China, Vietnam, India, Indonesia, Poland, Italy, and more — each with different duty rates under US trade agreements.</div>
+          <!-- Total + reset -->
+          <div id="total-bar">
+            <div class="total-label">Estimated Total</div>
+            <div class="total-amount" id="res-total"></div>
+          </div>
+          <button id="reset-btn" class="btn-ghost center">Start over</button>
+
         </div>
       </div>
-
-      <div class="duty-table-wrap">
-        <div class="section-heading" style="margin-bottom:12px"><span>📊</span> Key Duty Rates by Origin (Furniture, HS Chapter 94)</div>
-        <table class="duty-table">
-          <thead><tr><th>Country</th><th>Duty Rate</th><th>Trade Agreement</th></tr></thead>
-          <tbody>
-            <tr><td>🇻🇳 Vietnam</td><td class="duty-good">0%</td><td>Normal trade relations</td></tr>
-            <tr><td>🇮🇳 India</td><td class="duty-good">0%</td><td>Normal trade relations</td></tr>
-            <tr><td>🇮🇩 Indonesia</td><td class="duty-good">0%</td><td>Normal trade relations</td></tr>
-            <tr><td>🇵🇱 Poland</td><td class="duty-good">0%</td><td>Normal trade relations</td></tr>
-            <tr><td>🇲🇽 Mexico</td><td class="duty-good">0%</td><td>USMCA</td></tr>
-            <tr><td>🇬🇧 United Kingdom</td><td class="duty-good">0%</td><td>Normal trade relations</td></tr>
-            <tr><td>🇲🇾 Malaysia</td><td class="duty-mid">3%</td><td>Standard rate</td></tr>
-            <tr><td>🇹🇷 Turkey</td><td class="duty-mid">5%</td><td>Standard rate</td></tr>
-            <tr><td>🇨🇳 China</td><td class="duty-high">25%</td><td>Section 301 tariff</td></tr>
-          </tbody>
-        </table>
-      </div>
     </div>
-
   </main>
 
   <script src="app.js"></script>

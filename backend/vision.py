@@ -28,11 +28,18 @@ def analyze_room(image_bytes: bytes, media_type: str = "image/jpeg",
                     {
                         "type": "text",
                         "text": (
-                            f"You are an expert interior designer. Analyze this room photo and create a complete design plan.\n\n"
+                            f"You are an expert interior designer. Carefully analyze this room photo.\n\n"
                             f"User preferences:\n"
                             f"- Style: {style}\n"
                             f"- Mood: {mood}\n"
-                            f"- Budget: ${budget}\n\n"
+                            f"- Budget: ${budget} total for all furniture combined\n\n"
+                            f"IMPORTANT: Look at what furniture and items are actually visible in this room photo. "
+                            f"Only recommend product categories that are relevant to what you see. "
+                            f"For example: if it's a bedroom, recommend Bed, Dresser, Side Table — not Sofa or Dining Table. "
+                            f"If it's a living room, recommend Sofa, Coffee Table, Accent Chair — not Bed or Dresser. "
+                            f"Pick 3-5 categories maximum that are the most impactful for this specific room. "
+                            f"The total estimated cost across all recommended categories must stay within ${budget} ± $100. "
+                            f"Prioritize fewer, higher-impact pieces if the budget is tight.\n\n"
                             f"Return ONLY valid JSON, no markdown, no explanation:\n"
                             f"{{\n"
                             f'  "room_type": "<living room|bedroom|dining room|home office>",\n'
@@ -46,13 +53,10 @@ def analyze_room(image_bytes: bytes, media_type: str = "image/jpeg",
                             f'    "name": "<accent color name>",\n'
                             f'    "hex": "<hex code>"\n'
                             f'  }},\n'
+                            f'  "detected_items": ["<list furniture/items you can actually see in the photo>"],\n'
                             f'  "recommended_products": [\n'
-                            f'    "<category1>", "<category2>", "<category3>", "<category4>", "<category5>"\n'
-                            f'  ],\n'
-                            f'  "wall_decor": {{\n'
-                            f'    "primary": "<e.g. Abstract Canvas Print>",\n'
-                            f'    "secondary": "<e.g. Floating Shelves with plants>"\n'
-                            f'  }}\n'
+                            f'    "<pick 3-5 from ONLY these exact values based on what makes sense for this room: Sofa, Coffee Table, Accent Chair, Floor Lamp, Area Rug, Bookshelf, Side Table, Bed, Dining Table, Dresser>"\n'
+                            f'  ]\n'
                             f"}}"
                         ),
                     },

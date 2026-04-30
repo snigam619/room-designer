@@ -214,8 +214,11 @@ def get_recommendations(style: str, recommended_categories: list, max_per_catego
 
     for category in recommended_categories:
         matches = [p for p in PRODUCTS if p["category"].lower() == category.lower() and p["style"] == style]
-        if not matches:
-            matches = [p for p in PRODUCTS if p["category"].lower() == category.lower()]
+        # Pad to max_per_category with products from other styles
+        if len(matches) < max_per_category:
+            existing_ids = {p["id"] for p in matches}
+            extras = [p for p in PRODUCTS if p["category"].lower() == category.lower() and p["id"] not in existing_ids]
+            matches = matches + extras
         result[category] = matches[:max_per_category]
 
     return result

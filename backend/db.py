@@ -49,16 +49,19 @@ def get_products_by_style_and_categories(style: str, categories: list) -> dict:
         by_category = {}
         for category in categories:
             matches = [p for p in all_products if p["category"].lower() == category.lower()]
-            if not matches:
+            # Always pad to 3 by pulling products from other styles for this category
+            if len(matches) < 3:
+                existing_ids = {p["id"] for p in matches}
                 fallback = (
                     client.table("products")
                     .select("*")
                     .eq("category", category)
-                    .limit(3)
+                    .limit(10)
                     .execute()
                 )
-                matches = fallback.data or []
-                _inject_brands(matches, catalog_all)
+                extras = [p for p in (fallback.data or []) if p["id"] not in existing_ids]
+                _inject_brands(extras, catalog_all)
+                matches = matches + extras
             by_category[category] = matches[:3]
 
         if not any(by_category.values()):
